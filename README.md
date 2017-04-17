@@ -1,4 +1,4 @@
-# Devise::Jira::Authenticatable
+# Devise::Jira::Authenticable
 
 This provides a mechanism to allow devise to authenticate using a JIRA instance.  It
 integrates with the jira-ruby.gem.
@@ -8,7 +8,7 @@ integrates with the jira-ruby.gem.
 Add this line to your application's Gemfile:
 
 ```ruby
-gem 'devise-jira-authenticatable'
+gem 'devise-jira-authenticable'
 ```
 
 And then execute:
