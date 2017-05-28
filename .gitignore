@@ -1,6 +1,6 @@
 /.idea/
 /.bundle/
-/.yardoc
+/.yardoc/
 /Gemfile.lock
 /_yardoc/
 /coverage/
@@ -11,3 +11,4 @@
 
 # rspec failure tracking
 .rspec_status
+spec/rails_app/log/
