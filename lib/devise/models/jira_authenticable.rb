@@ -8,7 +8,7 @@ module Devise
     # attributes returned by the JIRA server are made available via the
     # +jira_attributes+ accessor in the user model.
     #
-    # The RadiusAuthenticatable module works by using the configured
+    # The JiraAuthenticable module works by using the configured
     # +radius_uid_generator+ to generate a UID based on the username and the radius server
     # hostname or IP address.  This UID is used to see if an existing record representing
     # the user already exists.  If it does, radius authentication proceeds through that
@@ -27,9 +27,7 @@ module Devise
     # JiraAuthenticable adds the following options to devise_for:
     # * +jira_site+: The URL for the JIRA server.
     # * +jira_context_path+: the context path for JIRA.
-    # * +jira_additional_cookie+: A shared secret with the JIRA server.
     # * +jira_read_timeout+: The time we wait for a response from JIRA.
-    # * +radius_uid_field+: The database column to store the UID in
     #
     # == Callbacks
     #
@@ -44,11 +42,11 @@ module Devise
       extend ActiveSupport::Concern
 
       included do
-        attr_accessor :jira_attributes
+        attr_accessor :jira_client
       end
 
       # Use the currently configured JIRA server to attempt to authenticate the
-      # supplied username and password.  If authentication succeeds, make the radius
+      # supplied username and password.  If authentication succeeds, make the JIRA
       # attributes returned by the server available via the radius_attributes accessor.
       # Returns true if authentication was successful and false otherwise.
       #
@@ -56,23 +54,15 @@ module Devise
       # * +username+: The username to send to the radius server
       # * +password+: The password to send to the radius server
       def valid_jira_password?(username, password)
-        server = self.class.jira_server
-        port = self.class.jira_server_port
-
-        begin
-          client = JIRA::Client.new(
-            username: username,
-            password: password,
-            site: options[:jira_site],
-            context_path: options[:jira_context_path],
-            auth_type: :cookie,
-            use_cookies: options[:jira_additional_cookie],
-            read_timeout: options[:jira_read_timeout]
-          )
-        rescue
-          return false if self.class.handle_radius_timeout_as_failure
-          raise
-        end
+        self.jira_client = JIRA::Client.new(
+          username: username,
+          password: password,
+          site: self.class.jira_site,
+          context_path: self.class.jira_context_path,
+          auth_type: :cookie,
+          use_cookies: true,
+          read_timeout: self.class.jira_read_timeout
+        )
       end
 
       # Callback invoked by the JiraAuthenticable strategy after authentication
@@ -80,7 +70,7 @@ module Devise
       # This callback is invoked prior to devise checking if the model is active for
       # authentication.
       def after_jira_authentication
-        self.save(:validate => false)
+        self.save(validate: false)
       end
 
       module ClassMethods
@@ -104,7 +94,7 @@ module Devise
         # username is extracted using the first value from +Devise.authentication_keys+.
         # The username is converted to lowercase if the authentication key is in the list
         # of case insensitive keys configured for Devise.
-        def radius_credentials(authentication_hash)
+        def jira_credentials(authentication_hash)
           key = self.authentication_keys.first
           value = authentication_hash[key]
           value.downcase! if (self.case_insensitive_keys || []).include?(key)

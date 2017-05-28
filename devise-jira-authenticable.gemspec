@@ -9,8 +9,8 @@ Gem::Specification.new do |spec|
   spec.authors       = ['trapeze.bell.peter']
   spec.email         = ['peter.bell@trapezegroup.com']
 
-  spec.summary       = %q{Provide Devise authentication using a JIRA instance.}
-  spec.description   = %q{Interacts with the ruby-jira gem to provide authentication of a login against a JIRA system.}
+  spec.summary       = 'Provide Devise authentication using a JIRA instance.'
+  spec.description   = 'Interacts with the ruby-jira gem to provide authentication of a login against a JIRA system.'
   spec.homepage      = 'https://github.com/trapeze-bell-peter/devise-jira-authenticable'
   spec.license       = 'MIT'
 
@@ -37,8 +37,8 @@ Gem::Specification.new do |spec|
   spec.add_development_dependency 'sqlite3', '~> 1.3'
   spec.add_development_dependency 'jquery-rails', '~> 4.3'
 
-  spec.add_development_dependency 'rspec', '~> 3.5'
-  spec.add_development_dependency 'rspec-rails', '~> 3.5'
+  spec.add_development_dependency 'rspec', '~> 3.6'
+  spec.add_development_dependency 'rspec-rails', '~> 3.6'
   spec.add_development_dependency 'capybara', '~> 2.13'
   spec.add_development_dependency 'factory_girl_rails', '~> 4.8'
 end

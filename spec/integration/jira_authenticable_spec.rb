@@ -62,12 +62,12 @@ describe "login" do
     fill_in "Password", :with => 'password'
     click_button "Sign in"
 
-    uid = Admin.radius_uid_generator.call('testuser', Admin.radius_server)
-    Admin.where(Admin.radius_uid_field => uid).count.should == 1
+    uid = User.radius_uid_generator.call('testuser', User.radius_server)
+    User.where(User.radius_uid_field => uid).count.should == 1
   end
 
   it "successfully logs in a user with case insensitive username" do
-    swap(Devise, :case_insensitive_keys => [Admin.authentication_keys.first]) do
+    swap(Devise, :case_insensitive_keys => [User.authentication_keys.first]) do
       fill_in "Login", :with => 'TESTUSER'
       fill_in "Password", :with => 'password'
       click_button "Sign in"

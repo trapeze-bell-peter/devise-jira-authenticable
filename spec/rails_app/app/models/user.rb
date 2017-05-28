@@ -1,4 +1,4 @@
-class Admin < ActiveRecord::Base
+class User < ActiveRecord::Base
   devise :database_authenticatable, :jira_authenticable
 
   attr_accessor :login

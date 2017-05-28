@@ -1,14 +1,13 @@
 ENV["RAILS_ENV"] ||= 'test'
 
-require 'rails_app/config/environment'
+require 'devise/jira_authenticable'
 
-# require 'rspec/rails'
-# require 'factory_girl'
+require 'rails_app/config/environment'
 
 require 'spec_helper'
 require 'rspec/rails'
 require 'capybara/rails'
-require 'devise'
+require 'factory_girl'
 
 # Load in all of our supporting code
 Dir["#{File.dirname(__FILE__)}/support/**/*.rb"].each {|f| require f}
@@ -22,10 +21,9 @@ ActiveRecord::Migrator.migrate(File.expand_path("../rails_app/db/migrate/", __FI
 # RSpec Configuration
 RSpec.configure do |config|
   config.use_transactional_fixtures = true
-  config.treat_symbols_as_metadata_keys_with_true_values = true
   config.run_all_when_everything_filtered = true
   config.filter_run :focus
   config.order = 'random'
 
-  config.include Devise::JiraAuthenticable::TestHelpers
+  config.include MockedHttpClient
 end

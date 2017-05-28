@@ -1,26 +1,23 @@
-require "devise/jira_authenticable/version"
+
 
 require 'devise'
 
+require 'devise/jira_authenticable/version'
+require 'devise/models/jira_authenticable'
+require 'devise/strategies/jira_authenticable'
+
 module Devise
-  # The hostname or IP address of the radius server
+  # The URL of the JIRA server.
   mattr_accessor :jira_site
 
-  # The port for the radius server
+  # The context path for the JIRA server ()
   mattr_accessor :jira_context_path
   @@jira_context_path = ''
 
   # The secret for the JIRA server
-  mattr_accessor :jira_additional_cookie
-
   # The timeout in seconds for radius requests
   mattr_accessor :jira_read_timeout
-  @@radius_server_timeout = 120
-
-  # The number of times to retry radius requests
-  mattr_accessor :radius_server_retries
-  @@radius_server_retries = 0
+  @@jira_read_timeout = 120
 end
 
-Devise.add_module(:jira_authenticable, :route => :session, :strategy => true,
-                  :controller => :sessions, :model  => true)
+Devise.add_module(:jira_authenticable, route: :session, strategy: true, controller: :sessions, model: true)

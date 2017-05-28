@@ -10,7 +10,5 @@ module GeneratorHelpers
 end
 
 RSpec::configure do |c|
-  c.include GeneratorHelpers, :type => :generator, :example_group => {
-    :file_path => /spec[\\\/]generators/
-  }
+  c.include GeneratorHelpers, :type => :generator, :file_path => /spec[\\\/]generators/
 end

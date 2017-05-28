@@ -182,10 +182,10 @@ Devise.setup do |config|
   # order by explicitly telling warden the order in which to apply the strategies.
   # See the Warden Configuration section for further details.
   #
-  # Configure the hostname or IP address of the radius server to use.
+  # Configure the hostname or IP address of the JIRA server to use.
   config.jira_site = 'localhost'
 
-  # Configure the time in seconds to wait for a radius server to respond.
+  # Configure the time in seconds to wait for a JIRA server to respond.
   config.jira_read_timeout = 60
 
   # ==> Scopes configuration
