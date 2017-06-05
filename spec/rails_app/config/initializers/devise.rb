@@ -183,7 +183,8 @@ Devise.setup do |config|
   # See the Warden Configuration section for further details.
   #
   # Configure the hostname or IP address of the JIRA server to use.
-  config.jira_site = 'localhost'
+  config.jira_site = 'https://dev.trapsoft.com'
+  config.jira_context_path = '/jira'
 
   # Configure the time in seconds to wait for a JIRA server to respond.
   config.jira_read_timeout = 60

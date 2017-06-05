@@ -76,10 +76,8 @@ describe Devise::Models::JiraAuthenticable do
 =end
 
   context "when validating a JIRA user's password" do
-    before do
-      @user = User.new
-      setup_http_client_mocks
-    end
+    let!(:user) { FactoryGirl.build :user }
+#    before { setup_http_client_mocks }
 
     it "passes the configured options when building the radius request" do
 
@@ -92,16 +90,16 @@ describe Devise::Models::JiraAuthenticable do
     end
 
     it 'returns false when the password is incorrect' do
-      expect(@user.valid_jira_password?('testuser', 'wrongpassword')).to be_falsey
+      expect(user.valid_jira_password?(user.username, 'wrongpassword')).to be_falsey
     end
 
     it 'returns true when the password is correct' do
-      expect(@user.valid_jira_password?('testuser', 'password')).to be_truthy
+      expect(user.valid_jira_password?(user.username, user.password)).to be_truthy
     end
 
     it 'stores the client in the model' do
-      @user.valid_jira_password?('testuser', 'password')
-      expect(@user.jira_client).to eq(jira-clients.attributes('testuser'))
+      user.valid_jira_password?(user.username, user.password)
+      expect(user.jira_client.Issue.find('JETU-1')).to be_a(JIRA::Resource::Issue)
     end
 
     context "when handle_radius_timeout_as_failure is false" do
