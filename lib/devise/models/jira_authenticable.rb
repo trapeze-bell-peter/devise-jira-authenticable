@@ -63,6 +63,7 @@ module Devise
           use_cookies: true,
           read_timeout: self.class.jira_read_timeout
         )
+        self.jira_client.authenticated?
       end
 
       # Callback invoked by the JiraAuthenticable strategy after authentication
