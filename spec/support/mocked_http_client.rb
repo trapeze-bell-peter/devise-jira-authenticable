@@ -1,22 +1,31 @@
+require 'webmock/rspec'
 
-# The jira-ruby gem uses its own class HttpClient internally to connect to JIRA.  Here we stub the class to provide
-# test versions of the methods.
-module MockedHttpClient
-  class HttpClient
-    def initialize(options)
-      @user = FactoryGirl.build :user
-      @options = options
-    end
+RSpec.shared_context 'mock jira http calls', :shared_context => :metadata do
+  let(:example_user) { FactoryGirl.build :user }
 
-    def make_cookie_auth_request
-      @options[:user]==@user.username && @options[:password]==@user.password ? @options : nil
-    end
+  let(:session_cookie) { '6E3487971234567896704A9EB4AE501F' }
+  let(:session_body) do
+    {
+      'session': {'name' => "JSESSIONID", 'value' => session_cookie },
+      'loginInfo': {'failedLoginCount' => 1, 'loginCount' => 2,
+                    'lastFailedLoginTime' => (DateTime.now - 2).iso8601,
+                    'previousLoginTime' => (DateTime.now - 5).iso8601 }
+    }
   end
 
-  # Setup mocks.
-  def setup_http_client_mocks
-    allow(JIRA::HttpClient).to receive(:new) do |options|
-      HttpClient.new(options)
-    end
+  before(:each) do
+    # General case of API call with no authentication, or wrong authentication
+    stub_request(:post, 'https://localhost:2990/jira/rest/auth/1/session').
+      to_return(status: 401, headers: {} )
+
+    # Now special case of API with correct authentication.  This gets checked first by RSpec.
+    stub_request(:post, 'https://localhost:2990/jira/rest/auth/1/session')
+      .with(body: "{\"username\":\"#{example_user.username}\",\"password\":\"#{example_user.password}\"}")
+      .to_return(status: 200, body: session_body.to_json,
+                 headers: { 'Set-Cookie': "JSESSIONID=#{session_cookie}; Path=/; HttpOnly"})
+
+    stub_request(:get, 'https://localhost:2990/jira/rest/api/2/project')
+      .with(headers: { cookie: "JSESSIONID=#{session_cookie}" } )
+      .to_return(status: 200, body: '[]', headers: {} )
   end
 end

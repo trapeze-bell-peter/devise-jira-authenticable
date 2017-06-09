@@ -25,5 +25,5 @@ RSpec.configure do |config|
   config.filter_run :focus
   config.order = 'random'
 
-  config.include MockedHttpClient
+  config.include_context 'mock jira http calls', :include_shared => true
 end

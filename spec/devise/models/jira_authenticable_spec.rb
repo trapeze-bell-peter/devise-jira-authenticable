@@ -1,18 +1,19 @@
 require 'rails_helper'
 
 class Configurable < User
-  devise(:jira_authenticable, jira_site: 'localhost', jira_context_path: '')
+  # Note, will pick up the standard configutation from the Rail apps config/initializers/devise.rb
+  devise(:jira_authenticable)
 end
 
 describe Devise::Models::JiraAuthenticable do
   let(:auth_key) { Devise.authentication_keys.first }
 
   it 'allows configuration of the JIRA server URL' do
-    expect(Configurable.jira_site).to eq 'localhost'
+    expect(Configurable.jira_site).to eq 'https://localhost:2990'
   end
 
   it 'allows configuration of the JIRA context path' do
-    expect(Configurable.jira_context_path).to be_blank
+    expect(Configurable.jira_context_path).to eq '/jira'
   end
 
   it 'allows configuration of the JIRA server timeout' do
@@ -20,22 +21,6 @@ describe Devise::Models::JiraAuthenticable do
   end
 
 =begin
-  it "converts the username to lower case if the key is case insensitive" do
-    swap(Devise, {:authentication_keys => [:username, :domain],
-           :case_insensitive_keys => [:username]}) do
-      auth_hash = { :username => 'Cbascom', :password => 'testing' }
-      Configurable.radius_credentials(auth_hash).should == ['cbascom', 'testing']
-    end
-  end
-
-  it "does not convert the username to lower case if the key is not case insensitive" do
-    swap(Devise, {:authentication_keys => [:username, :domain],
-           :case_insensitive_keys => []}) do
-      auth_hash = { :username => 'Cbascom', :password => 'testing' }
-      Configurable.radius_credentials(auth_hash).should == ['Cbascom', 'testing']
-    end
-  end
-
   context "when finding the user record for authentication" do
     let(:good_auth_hash) { {auth_key => 'testuser', :password => 'password'} }
     let(:bad_auth_hash) { {auth_key => 'testuser', :password => 'wrongpassword'} }
@@ -76,30 +61,19 @@ describe Devise::Models::JiraAuthenticable do
 =end
 
   context "when validating a JIRA user's password" do
-    let!(:user) { FactoryGirl.build :user }
-#    before { setup_http_client_mocks }
-
-    it "passes the configured options when building the radius request" do
-
-      @user.valid_jira_password?('testuser', 'password')
-
-      expect(jira_client.jira_site).to 'localhost'
-      radius_server.options[:reply_timeout].should == User.radius_server_timeout
-      radius_server.options[:retries_number].should == User.radius_server_retries
-      radius_server.options[:dict].should be_a(Radiustar::Dictionary)
-    end
+    include_context 'mock jira http calls'
 
     it 'returns false when the password is incorrect' do
-      expect(user.valid_jira_password?(user.username, 'wrongpassword')).to be_falsey
+      expect(example_user.valid_jira_password?(example_user.username, 'wrongpassword')).to be_falsey
     end
 
     it 'returns true when the password is correct' do
-      expect(user.valid_jira_password?(user.username, user.password)).to be_truthy
+      expect(example_user.valid_jira_password?(example_user.username, example_user.password)).to be_truthy
     end
 
     it 'stores the client in the model' do
-      user.valid_jira_password?(user.username, user.password)
-      expect(user.jira_client.Issue.find('JETU-1')).to be_a(JIRA::Resource::Issue)
+      example_user.valid_jira_password?(example_user.username, example_user.password)
+      expect(example_user.jira_client.Project.all).to be_empty
     end
 
     context "when handle_radius_timeout_as_failure is false" do

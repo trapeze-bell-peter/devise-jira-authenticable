@@ -12,7 +12,7 @@ FactoryGirl.define do
 =end
 
   factory :user do
-    username { ENV['USERNAME'] }
-    password { ENV['PASSWORD'] }
+    username { 'testuser' }
+    password { 'password' }
   end
 end
