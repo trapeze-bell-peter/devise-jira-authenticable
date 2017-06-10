@@ -8,12 +8,10 @@ module Devise
     # attributes returned by the JIRA server are made available via the
     # +jira_attributes+ accessor in the user model.
     #
-    # The JiraAuthenticable module works by using the configured
-    # +radius_uid_generator+ to generate a UID based on the username and the radius server
-    # hostname or IP address.  This UID is used to see if an existing record representing
-    # the user already exists.  If it does, radius authentication proceeds through that
+    # The JiraAuthenticable module works by checking if the requested username already exists.
+    # If it does, radius authentication proceeds through that
     # user record.  Otherwise, a new user record is built and authentication proceeds.
-    # If authentication is successful, the +after_radius_authentication+ callback is
+    # If authentication is successful, the +after_jira_authentication+ callback is
     # invoked, the default implementation of which simply saves the user record with
     # validations disabled.
     #
@@ -64,6 +62,9 @@ module Devise
           read_timeout: self.class.jira_read_timeout
         )
         self.jira_client.authenticated?
+      rescue Timeout::Error
+        raise Timeout::Error unless self.class.handle_jira_timeout_as_failure
+        nil
       end
 
       # Callback invoked by the JiraAuthenticable strategy after authentication
@@ -75,7 +76,7 @@ module Devise
       end
 
       module ClassMethods
-        Devise::Models.config(self, :jira_site, :jira_context_path, :jira_read_timeout)
+        Devise::Models.config(self, :jira_site, :jira_context_path, :jira_read_timeout, :handle_jira_timeout_as_failure)
 
         # Invoked by the JiraAuthenticatable strategy to perform the authentication
         # against the JIRA server.  The username is extracted from the authentication hash.

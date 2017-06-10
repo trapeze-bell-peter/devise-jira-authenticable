@@ -14,10 +14,13 @@ module Devise
   mattr_accessor :jira_context_path
   @@jira_context_path = ''
 
-  # The secret for the JIRA server
-  # The timeout in seconds for radius requests
+  # The timeout in seconds for JIRA requests
   mattr_accessor :jira_read_timeout
   @@jira_read_timeout = 120
+
+  # Option to handle radius timeout as authentication failure
+  mattr_accessor :handle_jira_timeout_as_failure
+  @@handle_jira_timeout_as_failure = false
 end
 
 Devise.add_module(:jira_authenticable, route: :session, strategy: true, controller: :sessions, model: true)
