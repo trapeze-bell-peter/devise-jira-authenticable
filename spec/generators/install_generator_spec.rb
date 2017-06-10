@@ -1,66 +1,32 @@
-require 'spec_helper'
-require 'generators/devise_radius_authenticable/install_generator'
+require 'rails_helper'
 
-describe DeviseRadiusAuthenticatable::InstallGenerator do
-  destination File.expand_path("../../../tmp", __FILE__)
+require 'generators/devise_jira_authenticable/install_generator'
+
+describe DeviseJiraAuthenticable::InstallGenerator, type: :generator do
+  destination File.expand_path('../../../tmp', __FILE__)
 
   before do
     prepare_devise
   end
 
   it "requires the JIRA URL to be specified" do
-    expect { run_generator }.
-      to raise_error(Thor::RequiredArgumentMissingError,
-                     /required arguments 'server'/)
-  end
-
-  it "requires the radius server shared secret to be specified" do
-    expect { run_generator ['1.1.1.1'] }.
-      to raise_error(Thor::RequiredArgumentMissingError,
-                     /required arguments 'secret'/)
+    expect{ run_generator }.to raise_error(Thor::RequiredArgumentMissingError, /required arguments 'jira_site'/)
   end
 
   context "with required arguments" do
-
     subject { file('config/initializers/devise.rb') }
 
     context "with default options" do
       before do
-        run_generator ['1.1.1.1', 'secret']
+        run_generator ['https://testhost/']
       end
 
-      it { should exist }
-      it { should contain('==> Configuration for radius_authenticatable') }
-      it { should contain("config.radius_server = '1.1.1.1'") }
-      it { should contain("config.radius_server_port = 1812") }
-      it { should contain("config.radius_server_secret = 'secret'") }
-      it { should contain("config.radius_server_timeout = 60") }
-      it { should contain("config.radius_server_retries = 0") }
-      it { should contain("config.radius_uid_field = :uid") }
-      it { should contain("config.radius_uid_generator =") }
-      it { should contain("config.radius_dictionary_path =") }
-      it { should contain("config.handle_radius_timeout_as_failure = false") }
-    end
-
-    context "with custom options" do
-      before do
-        run_generator ['1.1.1.2', 'password', '--port=1813',
-          '--timeout=120', '--retries=3', '--uid_field=email',
-          '--dictionary_path=/tmp/dictionaries',
-          '--handle_timeout_as_failure=true']
-      end
-
-      it { should exist }
-      it { should contain('==> Configuration for radius_authenticatable') }
-      it { should contain("config.radius_server = '1.1.1.2'") }
-      it { should contain("config.radius_server_port = 1813") }
-      it { should contain("config.radius_server_secret = 'password'") }
-      it { should contain("config.radius_server_timeout = 120") }
-      it { should contain("config.radius_server_retries = 3") }
-      it { should contain("config.radius_uid_field = :email") }
-      it { should contain("config.radius_uid_generator =") }
-      it { should contain("config.radius_dictionary_path = '/tmp/dictionaries'") }
-      it { should contain("config.handle_radius_timeout_as_failure = true") }
+      it { is_expected.to exist }
+      it { is_expected.to contain('==> Configuration for jira_authenticable') }
+      it { is_expected.to contain("config.jira_site = 'https://testhost/'") }
+      it { is_expected.to contain("# config.jira_context_path = '/jira_context_path'") }
+      it { is_expected.to contain("# config.jira_read_timeout = 99") }
+      it { is_expected.to contain("# config.handle_jira_timeout_as_failure = true") }
     end
   end
 end

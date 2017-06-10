@@ -5,7 +5,7 @@ require 'devise/jira_authenticable/version'
 
 Gem::Specification.new do |spec|
   spec.name          = 'devise-jira-authenticable'
-  spec.version       = Devise::Jira::Authenticable::VERSION
+  spec.version       = Devise::JiraAuthenticable::VERSION
   spec.authors       = ['trapeze.bell.peter']
   spec.email         = ['peter.bell@trapezegroup.com']
 
@@ -42,4 +42,5 @@ Gem::Specification.new do |spec|
   spec.add_development_dependency 'capybara', '~> 2.13'
   spec.add_development_dependency 'factory_girl_rails', '~> 4.8'
   spec.add_development_dependency 'webmock',  '~> 1.18', '>= 1.18.0'
+  spec.add_development_dependency 'ammeter', '~> 1.1.4'
 end
