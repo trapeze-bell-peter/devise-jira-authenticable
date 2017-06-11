@@ -218,7 +218,7 @@ Devise.setup do |config|
   config.warden do |warden_config|
     warden_config.default_strategies(:token_authenticatable,
                                      :database_authenticatable,
-                                     :radius_authenticatable,
+                                     :jira_authenticatable,
                                      {:scope => :administrator})
   end
 

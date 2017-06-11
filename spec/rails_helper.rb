@@ -58,4 +58,5 @@ RSpec.configure do |config|
   config.order = 'random'
 
   config.include_context 'mock jira http calls', :include_shared => true
+  config.include Devise::Test::IntegrationHelpers, type: :feature
 end
