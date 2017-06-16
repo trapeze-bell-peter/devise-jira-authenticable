@@ -1,11 +1,10 @@
 require 'rails_helper'
 
-describe 'login' do
+RSpec.feature 'login', type: :feature do
   let!(:admin) { FactoryGirl.create(:admin, password: 'password') }
 
-
-  it "allows an admin user held locally to login" do
-    sign_in users(:admin)
+  it 'allows an admin user held locally to login' do
+    sign_in :admin
     visit root_path
   end
 
