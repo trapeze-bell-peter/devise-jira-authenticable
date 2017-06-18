@@ -1,11 +1,6 @@
-class User < ActiveRecord::Base
-  devise :database_authenticatable, :jira_authenticable
-
-  attr_accessor :login
-
-  def self.find_for_database_authentication(conditions)
-    login = conditions.delete(:login)
-    conditions[:email] = login
-    super
-  end
+class User < ApplicationRecord
+  # Include default devise modules. Others available are:
+  # :confirmable, :lockable, :timeoutable and :omniauthable
+  devise :database_authenticatable, :recoverable, :rememberable, :trackable, :validatable,
+         authentication_keys: [:username]
 end
