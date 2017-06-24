@@ -1,30 +1,34 @@
 require 'rails_helper'
 
-class Configurable < User
-  # Note, will pick up the standard configutation from the Rail apps config/initializers/devise.rb
-  devise(:jira_authenticable)
-end
+
 
 describe Devise::Models::JiraAuthenticable do
+  before(:all) do
+    class User
+      # Note, will pick up the standard configutation from the Rail apps config/initializers/devise.rb
+      devise(:jira_authenticable)
+    end
+  end
+
   include_context 'mock jira http calls'
 
   let(:auth_key) { Devise.authentication_keys.first }
 
   it 'allows configuration of the JIRA server URL' do
-    expect(Configurable.jira_site).to eq 'https://localhost:2990'
+    expect(Devise.jira_site).to eq 'https://localhost:2990'
   end
 
   it 'allows configuration of the JIRA context path' do
-    expect(Configurable.jira_context_path).to eq '/jira'
+    expect(Devise.jira_context_path).to eq '/jira'
   end
 
   it 'allows configuration of the JIRA server timeout' do
-    expect(Configurable.jira_read_timeout).to eq(60)
+    expect(Devise.jira_read_timeout).to eq(120)
   end
 
   context "when finding the user record for authentication" do
-    let(:good_auth_hash) { {auth_key => 'testuser', :password => 'password'} }
-    let(:bad_auth_hash) { {auth_key => 'testuser', :password => 'wrongpassword'} }
+    let(:good_auth_hash) { {username: 'testuser', password: 'password'} }
+    let(:bad_auth_hash) { {username: 'testuser', password: 'wrongpassword'} }
 
     it "uses the username and password to find the record" do
       expect(User).to receive(:find_for_authentication).with(username: 'testuser')

@@ -85,23 +85,11 @@ module Devise
         # successful the callback is responsible for saving the resource.  Returns the
         # resource if authentication succeeds and nil if it does not.
         def find_for_jira_authentication(authentication_hash)
-          username, password = jira_credentials(authentication_hash)
+          username, password = authentication_hash[:username], authentication_hash[:password]
 
-          resource = find_for_authentication({ username: username  }) || new(username: username)
+          resource = find_for_authentication({ username: username }) || new(username: username)
 
           resource.valid_jira_password?(username, password) ? resource : nil
-        end
-
-        # Extract the username and password from the supplied authentication hash.  The
-        # username is extracted using the first value from +Devise.authentication_keys+.
-        # The username is converted to lowercase if the authentication key is in the list
-        # of case insensitive keys configured for Devise.
-        def jira_credentials(authentication_hash)
-          key = self.authentication_keys.first
-          value = authentication_hash[key]
-          value.downcase! if (self.case_insensitive_keys || []).include?(key)
-
-          [value, authentication_hash[:password]]
         end
       end
     end

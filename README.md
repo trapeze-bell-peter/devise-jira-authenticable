@@ -21,6 +21,9 @@ Or install it yourself as:
 
 ## Usage
 
+As JIRA uses a username for authentication, Devise has to be configured with username authentication rather
+than the standard email authentication.
+
 TODO: Write usage instructions here
 
 ## Development

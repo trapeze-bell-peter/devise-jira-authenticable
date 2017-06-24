@@ -7,6 +7,8 @@ require 'devise/models/jira_authenticable'
 require 'devise/strategies/jira_authenticable'
 
 module Devise
+  authentication_keys << :username
+
   # The URL of the JIRA server.
   mattr_accessor :jira_site
 
