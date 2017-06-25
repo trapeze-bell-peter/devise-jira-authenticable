@@ -43,6 +43,7 @@ Gem::Specification.new do |spec|
   spec.add_development_dependency 'rspec-rails', '~> 3.6'
   spec.add_development_dependency 'capybara', '~> 2.13'
   spec.add_development_dependency 'selenium-webdriver'
+  spec.add_development_dependency "chromedriver-helper", "1.0.0"
   spec.add_development_dependency 'factory_girl_rails', '~> 4.8'
   spec.add_development_dependency 'webmock',  '~> 1.18', '>= 1.18.0'
   spec.add_development_dependency 'ammeter', '~> 1.1.4'

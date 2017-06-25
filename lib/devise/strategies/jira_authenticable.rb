@@ -17,7 +17,6 @@ module Devise
         return fail(:invalid) unless resource
 
         if validate(resource)
-          resource.after_jira_authentication
           success!(resource)
         end
       end

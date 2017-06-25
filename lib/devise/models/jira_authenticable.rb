@@ -41,6 +41,7 @@ module Devise
 
       included do
         attr_accessor :jira_client
+        attr_accessor :password
       end
 
       # Use the currently configured JIRA server to attempt to authenticate the
@@ -67,14 +68,6 @@ module Devise
         nil
       end
 
-      # Callback invoked by the JiraAuthenticable strategy after authentication
-      # with the JIRA server has succeeded and devise has indicated the model is valid.
-      # This callback is invoked prior to devise checking if the model is active for
-      # authentication.
-      def after_jira_authentication
-        self.save(validate: false)
-      end
-
       module ClassMethods
         Devise::Models.config(self, :jira_site, :jira_context_path, :jira_read_timeout, :handle_jira_timeout_as_failure)
 
@@ -87,9 +80,9 @@ module Devise
         def find_for_jira_authentication(authentication_hash)
           username, password = authentication_hash[:username], authentication_hash[:password]
 
-          resource = find_for_authentication({ username: username }) || new(username: username)
+          resource = find_for_authentication( username: username )
 
-          resource.valid_jira_password?(username, password) ? resource : nil
+          resource&.valid_jira_password?(username, password) ? resource : nil
         end
       end
     end

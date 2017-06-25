@@ -5,6 +5,7 @@ require 'rails_app/config/environment'
 require 'rspec/rails'
 
 require 'capybara/rails'
+require 'selenium-webdriver'
 require 'ammeter/init'
 require 'factory_girl'
 
@@ -57,6 +58,12 @@ RSpec.configure do |config|
   config.filter_run :focus
   config.order = 'random'
 
-  config.include_context 'mock jira http calls', :include_shared => true
+  # config.include_context 'mock jira http calls', :include_shared => true
   config.include Devise::Test::IntegrationHelpers, type: :feature
 end
+
+Capybara.register_driver :chrome do |app|
+  Capybara::Selenium::Driver.new(app, :browser => :chrome)
+end
+
+Capybara.javascript_driver = :chrome

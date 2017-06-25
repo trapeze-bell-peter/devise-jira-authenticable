@@ -1,18 +1,36 @@
 require 'rails_helper'
 
-RSpec.feature 'login', type: :feature do
-  let!(:admin) { FactoryGirl.create(:admin, password: 'password') }
+include Warden::Test::Helpers
 
-  it 'allows an admin user held locally to login' do
-    sign_in :admin
+RSpec.feature 'login', type: :feature do
+  include_context 'mock jira http calls'
+
+  let!(:jirauser) { FactoryGirl.create(:jirauser) }
+
+  it 'allows a jira user to login' do
+    visit root_path
+    fill_in "Username", with: jirauser.username
+    fill_in "Password", with: 'password'
+    click_button "Log in"
+    expect( page ).to have_content 'Hello World!  Rails is running with devise-jira-authenticable.'
+  end
+
+  it 'allows a jira user to login' do
+    visit root_path
+    fill_in "Username", with: 'wrongname'
+    fill_in "Password", with: 'password'
+    click_button "Log in"
+    expect( page ).not_to have_content 'Hello World!  Rails is running with devise-jira-authenticable.'
+  end
+
+  it 'fails if an admin user tries to login with the wrong password' do
+    login_as jirauser, password: 'bad password'
     visit root_path
   end
 
 =begin
   it "is successful for a database user with params authentication" do
-    fill_in "Login", :with => @admin.email
-    fill_in "Password", :with => 'password'
-    click_button "Sign in"
+
 
     current_path.should == root_path
     page.should have_content("Signed in successfully")

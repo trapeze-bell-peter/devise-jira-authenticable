@@ -226,7 +226,7 @@ Devise.setup do |config|
   # See the Warden Configuration section for further details.
   #
   # Configure the URL of the JIRA server to use.
-  config.jira_site = 'https://localhost:2990'
+  config.jira_site = 'https://remotejira.com'
   # Configure the context path for the JIRA server.  Default is /jira
   config.jira_context_path = '/jira'
   # Configure the standard timeout period for JIRA server requests for authentication. Default is 120
@@ -238,7 +238,7 @@ Devise.setup do |config|
   # Turn scoped views on. Before rendering "sessions/new", it will first check for
   # "users/sessions/new". It's turned off by default because it's slower if you
   # are using only default views.
-  # config.scoped_views = false
+  config.scoped_views = true
 
   # Configure the default scope given to Warden. By default it's the first
   # devise role declared in your routes (usually :user).

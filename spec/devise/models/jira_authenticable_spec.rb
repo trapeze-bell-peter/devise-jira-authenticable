@@ -1,10 +1,8 @@
 require 'rails_helper'
 
-
-
 describe Devise::Models::JiraAuthenticable do
   before(:all) do
-    class User
+    class Jirauser
       # Note, will pick up the standard configutation from the Rail apps config/initializers/devise.rb
       devise(:jira_authenticable)
     end
@@ -14,42 +12,35 @@ describe Devise::Models::JiraAuthenticable do
 
   let(:auth_key) { Devise.authentication_keys.first }
 
-  it 'allows configuration of the JIRA server URL' do
-    expect(Devise.jira_site).to eq 'https://localhost:2990'
+  context 'configuration' do
+    it 'allows configuration of the JIRA server URL' do
+      expect(Devise.jira_site).to eq 'https://remotejira.com'
+    end
+
+    it 'allows configuration of the JIRA context path' do
+      expect(Devise.jira_context_path).to eq '/jira'
+    end
+
+    it 'allows configuration of the JIRA server timeout' do
+      expect(Devise.jira_read_timeout).to eq(120)
+    end
   end
 
-  it 'allows configuration of the JIRA context path' do
-    expect(Devise.jira_context_path).to eq '/jira'
-  end
-
-  it 'allows configuration of the JIRA server timeout' do
-    expect(Devise.jira_read_timeout).to eq(120)
-  end
-
-  context "when finding the user record for authentication" do
+  context "when finding the jirauser record for authentication" do
     let(:good_auth_hash) { {username: 'testuser', password: 'password'} }
     let(:bad_auth_hash) { {username: 'testuser', password: 'wrongpassword'} }
 
-    it "uses the username and password to find the record" do
-      expect(User).to receive(:find_for_authentication).with(username: 'testuser')
-      User.find_for_jira_authentication(good_auth_hash)
+    it 'uses the existing user record when one is found' do
+      user = FactoryGirl.create(:jirauser)
+      expect(Jirauser.find_for_jira_authentication(good_auth_hash)).to eq(user)
     end
 
-    context "and authentication succeeds" do
-      it "creates a new user record if none was found" do
-        expect(User.find_for_jira_authentication(good_auth_hash)).to be_new_record
-      end
-
-      it "uses the existing user record when one is found" do
-        user = FactoryGirl.create(:user)
-        expect(User.find_for_jira_authentication(good_auth_hash)).to eq(user)
-      end
+    it 'fails if a bad password is provided' do
+      expect(Jirauser.find_for_jira_authentication(bad_auth_hash)).to be_nil
     end
 
-    context "and authentication fails" do
-      it "does not create a new user record" do
-        expect(User.find_for_jira_authentication(bad_auth_hash)).to be_nil
-      end
+    it 'fails if the user has not been created' do
+      expect(Jirauser.find_for_jira_authentication(good_auth_hash)).to be_nil
     end
   end
 
@@ -59,18 +50,18 @@ describe Devise::Models::JiraAuthenticable do
     end
 
     it 'returns true when the password is correct' do
-      expect(example_user.valid_jira_password?(example_user.username, example_user.password)).to be_truthy
+      expect(example_user.valid_jira_password?(example_user.username, 'password')).to be_truthy
     end
 
     it 'stores the client in the model' do
-      example_user.valid_jira_password?(example_user.username, example_user.password)
+      example_user.valid_jira_password?(example_user.username, 'password')
       expect(example_user.jira_client.Project.all).to be_empty
     end
 
     context('and a timeout occurs') do
       before do
-        stub_request(:post, 'https://localhost:2990/jira/rest/auth/1/session')
-          .with(body: "{\"username\":\"#{example_user.username}\",\"password\":\"#{example_user.password}\"}")
+        stub_request(:post, 'https://remotejira.com/jira/rest/auth/1/session')
+          .with(body: "{\"username\":\"#{example_user.username}\",\"password\":\"password\"}")
           .to_timeout
       end
 
