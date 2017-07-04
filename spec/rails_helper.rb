@@ -1,9 +1,11 @@
-ENV["RAILS_ENV"] ||= 'test'
+require 'bundler'
 
-require 'rails_app/config/environment'
+Bundler.require :default, :development
+
+# If you're using all parts of Rails:
+Combustion.initialize! :all
 
 require 'rspec/rails'
-
 require 'capybara/rails'
 require 'selenium-webdriver'
 require 'ammeter/init'

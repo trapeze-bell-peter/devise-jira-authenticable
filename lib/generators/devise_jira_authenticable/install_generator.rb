@@ -1,8 +1,12 @@
-require "rails/generators"
+require 'rails/generators'
+require 'rails/generators/active_record'
+require 'rails/generators/migration'
 
 module DeviseJiraAuthenticable
   class InstallGenerator < Rails::Generators::Base
-    source_root File.expand_path("../../templates", __FILE__)
+    include Rails::Generators::Migration
+
+    source_root File.expand_path("../templates", __FILE__)
 
     desc <<-DESC.gsub(/ {6}/, '')
       Description:
@@ -14,7 +18,16 @@ module DeviseJiraAuthenticable
     class_option(:timeout, default: '120', desc: 'How long to wait for a response from the JIRA server')
 
     def install
-      inject_into_file("config/initializers/devise.rb", default_devise_settings, before: /^\s*.*==> Scopes configuration/)
+      inject_into_file("config/initializers/devise.rb", default_devise_settings,
+                       before: /^\s*.*==> Scopes configuration/)
+
+      invoke "active_record:model", ['JiraUser'], migration: false
+      migration_template 'add_jira_user.rb', 'db/migrate/jira_authenticable_create_jira_user.rb',
+                         migration_version: migration_version
+    end
+
+    def self.next_migration_number(path)
+      ActiveRecord::Generators::Base.next_migration_number(path)
     end
 
     private
@@ -38,5 +51,10 @@ module DeviseJiraAuthenticable
         # config.handle_jira_timeout_as_failure = true
       CONFIG
     end
+
+    def migration_version
+      Rails.version.start_with?('5') ? "[#{Rails::VERSION::MAJOR}.#{Rails::VERSION::MINOR}]" : ''
+    end
   end
+
 end

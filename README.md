@@ -19,10 +19,18 @@ Or install it yourself as:
 
     $ gem install devise-jira-authenticatable
 
+## Setup
+
+JIRA requires a username and password for authentication.  In order to allow us to use other authentication strategies in parallel, we store user details in a separate model for `devise-jira-authenticable`.
+
+You then need to add `devise-jira-authenticable` as a strategy to your rails app.  Therefore, run:
+
+    $ rails generate rails generate devise_radius_authenticatable:install <IP> <SECRET> [options] 
+
+
 ## Usage
 
-As JIRA uses a username for authentication, Devise has to be configured with username authentication rather
-than the standard email authentication.
+As JIRA uses a username for authentication, Devise has to be configured with username authentication rather than the standard email authentication.
 
 TODO: Write usage instructions here
 
