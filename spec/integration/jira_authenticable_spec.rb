@@ -1,8 +1,12 @@
 require 'rails_helper'
 
-include Warden::Test::Helpers
+# include Warden::Test::Helpers
 
 RSpec.feature 'login', type: :feature do
+  before(:all) do
+    generate_sample_app
+  end
+
   include_context 'mock jira http calls'
 
   let!(:jirauser) { FactoryGirl.create(:jirauser) }

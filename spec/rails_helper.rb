@@ -1,11 +1,9 @@
-require 'bundler'
+ENV["RAILS_ENV"] ||= 'test'
 
-Bundler.require :default, :development
-
-# If you're using all parts of Rails:
-Combustion.initialize! :all
+require 'rails_app/config/environment'
 
 require 'rspec/rails'
+
 require 'capybara/rails'
 require 'selenium-webdriver'
 require 'ammeter/init'
@@ -16,9 +14,9 @@ Dir["#{File.dirname(__FILE__)}/support/**/*.rb"].each {|f| require f}
 Dir["#{File.dirname(__FILE__)}/factories/**/*.rb"].each {|f| require f}
 
 # Make sure to get the database migrated
-ActiveRecord::Migration.verbose = false
-ActiveRecord::Base.logger = Logger.new(nil)
-ActiveRecord::Migrator.migrate(File.expand_path("../rails_app/db/migrate/", __FILE__))
+#ActiveRecord::Migration.verbose = false
+#ActiveRecord::Base.logger = Logger.new(nil)
+#ActiveRecord::Migrator.migrate(File.expand_path("../rails_app/db/migrate/", __FILE__))
 
 # RSpec Configuration
 RSpec.configure do |config|

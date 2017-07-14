@@ -39,7 +39,6 @@ Gem::Specification.new do |spec|
   spec.add_development_dependency 'sass-rails', '~> 5.0'
   spec.add_development_dependency 'jquery-rails', '~> 4.3'
 
-  spec.add_development_dependency 'combustion', '~> 0.7.0'
   spec.add_development_dependency 'rspec', '~> 3.6'
   spec.add_development_dependency 'rspec-rails', '~> 3.6'
   spec.add_development_dependency 'capybara', '~> 2.13'

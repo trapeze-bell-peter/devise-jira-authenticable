@@ -3,7 +3,7 @@ require 'rails_helper'
 require 'generators/devise_jira_authenticable/install_generator'
 
 describe DeviseJiraAuthenticable::InstallGenerator, type: :generator do
-  destination File.expand_path('../../../tmp', __FILE__)
+  destination File.expand_path('../../../tmp/dummy_app', __FILE__)
 
   before do
     prepare_devise
