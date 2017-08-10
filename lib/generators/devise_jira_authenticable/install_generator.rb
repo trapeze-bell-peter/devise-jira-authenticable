@@ -20,10 +20,6 @@ module DeviseJiraAuthenticable
     def install
       inject_into_file("config/initializers/devise.rb", default_devise_settings,
                        before: /^\s*.*==> Scopes configuration/)
-
-      invoke "active_record:model", ['JiraUser'], migration: false
-      migration_template 'add_jira_user.rb', 'db/migrate/jira_authenticable_create_jira_user.rb',
-                         migration_version: migration_version
     end
 
     def self.next_migration_number(path)
@@ -43,7 +39,7 @@ module DeviseJiraAuthenticable
         #
         # Configure the URL of the JIRA server to use.
         config.jira_site = '#{jira_site}'
-        # Configure the context path for the JIRA server.  Default is /jira
+        # Configure the context path for the JIRA server.  Default is blank.
         # config.jira_context_path = '/jira_context_path'
         # Configure the standard timeout period for JIRA server requests for authentication. Default is 60
         # config.jira_read_timeout = 99
@@ -52,9 +48,12 @@ module DeviseJiraAuthenticable
       CONFIG
     end
 
+    def devise_in_model
+      'devise :jira_authenticable, authentication_keys: [ :username ]'
+    end
+
     def migration_version
       Rails.version.start_with?('5') ? "[#{Rails::VERSION::MAJOR}.#{Rails::VERSION::MINOR}]" : ''
     end
   end
-
 end
