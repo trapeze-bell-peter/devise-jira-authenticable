@@ -2,7 +2,7 @@ require 'rails_helper'
 
 describe Devise::Models::JiraAuthenticable do
   before(:all) do
-    class Jirauser
+    class User
       # Note, will pick up the standard configutation from the Rail apps config/initializers/devise.rb
       devise(:jira_authenticable)
     end
@@ -32,15 +32,15 @@ describe Devise::Models::JiraAuthenticable do
 
     it 'uses the existing user record when one is found' do
       user = FactoryGirl.create(:jirauser)
-      expect(Jirauser.find_for_jira_authentication(good_auth_hash)).to eq(user)
+      expect(User.find_for_jira_authentication(good_auth_hash)).to eq(user)
     end
 
     it 'fails if a bad password is provided' do
-      expect(Jirauser.find_for_jira_authentication(bad_auth_hash)).to be_nil
+      expect(User.find_for_jira_authentication(bad_auth_hash)).to be_nil
     end
 
     it 'fails if the user has not been created' do
-      expect(Jirauser.find_for_jira_authentication(good_auth_hash)).to be_nil
+      expect(User.find_for_jira_authentication(good_auth_hash)).to be_nil
     end
   end
 
