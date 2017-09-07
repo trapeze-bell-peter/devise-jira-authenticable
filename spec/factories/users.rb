@@ -1,12 +1,15 @@
 FactoryGirl.define do
   factory :user do
-    factory :admin do
-      username { 'admin' }
-      email    { 'admin@testsite.com' }
+    factory :dbuser do
+      username { 'dbuser' }
+      email    { 'dbuser@testsite.com' }
       password { 'password' }
+      password_confirmation { 'password' }
     end
     factory :jirauser do
       username { 'testuser' }
+      email    { 'testuser@testsite.com' }
+      password { 8.times.map { [*'0'..'9', *'a'..'z'].sample }.join }
     end
   end
 end

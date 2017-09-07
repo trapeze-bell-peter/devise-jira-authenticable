@@ -41,7 +41,6 @@ module Devise
 
       included do
         attr_accessor :jira_client
-        attr_accessor :password
       end
 
       # Use the currently configured JIRA server to attempt to authenticate the

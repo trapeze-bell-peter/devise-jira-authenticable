@@ -14,7 +14,7 @@ Dir["#{File.dirname(__FILE__)}/factories/**/*.rb"].each {|f| require f}
 
 # Make sure to get the database migrated
 ActiveRecord::Migration.verbose = false
-ActiveRecord::Base.logger = Logger.new(nil)
+ActiveRecord::Base.logger = Logger.new(STDOUT)
 ActiveRecord::Migrator.migrate(File.expand_path("../rails_app/db/migrate/", __FILE__))
 
 # RSpec Configuration
