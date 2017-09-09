@@ -22,28 +22,30 @@ describe Devise::Models::JiraAuthenticable do
   end
 
   context 'jira authenticated user' do
-    let(:good_auth_hash) { {username: 'testuser', password: 'password'} }
-    let(:bad_auth_hash) { {username: 'testuser', password: 'wrongpassword'} }
-
-    it 'uses the existing user record when one is found' do
-      expect(User.find_for_jira_authentication(good_auth_hash)).to eq(jirauser)
+    it 'validates correctly against JIRA if a valid password is provided' do
+      expect(jirauser.valid_jira_password?('password')).to be_truthy
     end
 
-    it 'fails if a bad password is provided' do
-      expect(User.find_for_jira_authentication(bad_auth_hash)).to be_nil
+    it 'fails to validate against the database password' do
+      expect(jirauser.valid_password?('password')).to be_falsey
+    end
+
+    it 'fails to validate against JIRA if a bad password is provided' do
+      expect(jirauser.valid_jira_password?('wrongpassword')).to be_falsey
     end
   end
 
   context 'database authenticated user' do
-    let(:good_auth_hash) { {username: 'testuser', password: 'password'} }
-    let(:bad_auth_hash) { {username: 'testuser', password: 'wrongpassword'} }
-
-    it 'uses the existing user record when one is found' do
-      expect(User.find_for_jira_authentication(good_auth_hash)).to eq(jirauser)
+    it 'validates against the database if a valid password is provided' do
+      expect(dbuser.valid_password?('dbpassword')).to be_falsey
     end
 
-    it 'fails if a bad password is provided' do
-      expect(User.find_for_jira_authentication(bad_auth_hash)).to be_nil
+    it 'fails to validate against JIRA' do
+      expect(dbuser.valid_jira_password?('dbpassword')).to be_falsey
+    end
+
+    it 'fails to validate against the database if a bad password is provided' do
+      expect(dbuser.valid_password?('wrongpassword')).to be_falsey
     end
   end
 end
