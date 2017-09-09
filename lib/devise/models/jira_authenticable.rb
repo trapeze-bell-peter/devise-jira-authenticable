@@ -51,7 +51,7 @@ module Devise
       # Parameters::
       # * +username+: The username to send to the radius server
       # * +password+: The password to send to the radius server
-      def valid_jira_password?(username, password)
+      def valid_jira_password?(password)
         self.jira_client = JIRA::Client.new(
           username: username,
           password: password,
