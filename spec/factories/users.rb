@@ -3,8 +3,7 @@ FactoryGirl.define do
     factory :dbuser do
       username { 'dbuser' }
       email    { 'dbuser@testsite.com' }
-      password { 'password' }
-      password_confirmation { 'password' }
+      password { 'db-password' }
     end
     factory :jirauser do
       username { 'testuser' }
