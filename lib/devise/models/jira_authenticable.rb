@@ -81,7 +81,7 @@ module Devise
 
           resource = find_for_authentication( username: username )
 
-          resource&.valid_jira_password?(username, password) ? resource : nil
+          resource&.valid_jira_password?(password) ? resource : nil
         end
       end
     end

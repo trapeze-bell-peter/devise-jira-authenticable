@@ -2,8 +2,14 @@
 
 This provides a mechanism to allow devise to authenticate using a JIRA instance.  It integrates with the jira-ruby.gem.  Even if you intend only to use a `jira-authenticable` strategy within Devise, I suggest starting by getting Devise going with the `database-authenticable` strategy.
 
-
 The following instructions assume that you want to use the `jira-authenticable strategy` alongside another strategy such as `database-authenticatable`.
+
+> I had originally designed jira-authenticable to work both standalone and in conjunction
+> with database_authenticatable.  However, I have run into an issue.  In standalone mode
+> my user model needs to define a password method that is used elsewhere.  However, if
+> I define a password method it may overwrite the password method defined by the
+> database_authenticatable strategy.  So a no-win situation.  For now, please use the two
+> strategies together.
 
 ## Devise Preparation
 

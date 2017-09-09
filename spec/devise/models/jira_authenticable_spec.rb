@@ -2,9 +2,9 @@ require 'rails_helper'
 
 describe Devise::Models::JiraAuthenticable do
   before(:all) do
-    class User
+    class User < ApplicationRecord
       # Note, will pick up the standard configutation from the Rail apps config/initializers/devise.rb
-      devise(:jira_authenticable)
+      devise :jira_authenticable, :database_authenticatable
     end
   end
 
@@ -46,15 +46,15 @@ describe Devise::Models::JiraAuthenticable do
 
   context "when validating a JIRA user's password" do
     it 'returns false when the password is incorrect' do
-      expect(example_user.valid_jira_password?(example_user.username, 'wrongpassword')).to be_falsey
+      expect(example_user.valid_jira_password?('wrongpassword')).to be_falsey
     end
 
     it 'returns true when the password is correct' do
-      expect(example_user.valid_jira_password?(example_user.username, 'password')).to be_truthy
+      expect(example_user.valid_jira_password?('password')).to be_truthy
     end
 
     it 'stores the client in the model' do
-      example_user.valid_jira_password?(example_user.username, 'password')
+      example_user.valid_jira_password?('password')
       expect(example_user.jira_client.Project.all).to be_empty
     end
 
@@ -66,12 +66,12 @@ describe Devise::Models::JiraAuthenticable do
       end
 
       it "catches the RuntimeError exception if handle_jira_timeout_as_failure is false" do
-        expect { example_user.valid_jira_password?('testuser', 'password') }.to raise_error(RuntimeError)
+        expect { example_user.valid_jira_password?('password') }.to raise_error(RuntimeError)
       end
 
       it 'returns nil if handle_jira_timeout_as_failure is true' do
         swap(Devise, handle_jira_timeout_as_failure: true) do
-          expect(example_user.valid_jira_password?('testuser', 'password')).to be_nil
+          expect(example_user.valid_jira_password?('password')).to be_nil
         end
       end
     end
