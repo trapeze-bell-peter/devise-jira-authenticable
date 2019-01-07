@@ -1,7 +1,9 @@
 RSpec.shared_context 'mock jira http calls', :shared_context => :metadata do
   require 'webmock/rspec'
 
-  let(:example_user) { FactoryGirl.build :jirauser }
+  let(:example_user) do
+    FactoryBot.build :jirauser
+  end
 
   let(:session_cookie) { '6E3487971234567896704A9EB4AE501F' }
   let(:session_body) do

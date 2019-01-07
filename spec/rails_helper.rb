@@ -6,7 +6,7 @@ require 'rspec/rails'
 require 'capybara/rails'
 require 'selenium-webdriver'
 require 'ammeter/init'
-require 'factory_girl'
+require 'factory_bot'
 
 # Load in all of our supporting code
 Dir["#{File.dirname(__FILE__)}/support/**/*.rb"].each {|f| require f}

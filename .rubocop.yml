@@ -1,0 +1,57 @@
+require: rubocop-rspec
+
+Metrics/LineLength:
+  Max: 120
+
+Rails:
+  Enabled: true
+
+AllCops:
+# Removed as it stops Rubocop from looking at any files.
+#  Include:
+#    - '**/Rakefile'
+  Exclude:
+    - 'bin/**/*'
+    - 'db/**/*'
+    - 'config/**/*'
+    - 'script/**/*'
+  TargetRubyVersion: 2.5
+
+Style/RedundantSelf:
+  Enabled: false
+
+Style/SingleLineBlockParams:
+  Enabled: false
+
+Metrics/ModuleLength:
+  Exclude:
+    - "spec/*/**/*_spec.rb"
+
+Metrics/BlockLength:
+  Exclude:
+    - "spec/*/**/*_spec.rb"
+
+RSpec/LetSetup:
+  Enabled: false
+
+RSpec/MultipleExpectations:
+  Max: 3
+
+Metrics/BlockLength:
+  ExcludedMethods: ['describe', 'context', 'feature', 'define', 'shared_examples', 'factory']
+
+# I like to use the description 'scenario in feature specs.
+Capybara/FeatureMethods:
+  Exclude:
+    - spec/features/**/*_spec.rb
+
+# Rubocop gets confused between the Capybara find_by_id and the dynamic finders for ActiveRecords in Rails.
+# Disabled in features to stop false warnings.
+Rails/DynamicFindBy:
+  Exclude:
+    - spec/features/**/*_spec.rb
+
+# Feature specs are written in a style similar to Cucumber.  As such they have more lines than Rubocop likes.
+RSpec/ExampleLength:
+  Exclude:
+    - spec/features/**/*_spec.rb

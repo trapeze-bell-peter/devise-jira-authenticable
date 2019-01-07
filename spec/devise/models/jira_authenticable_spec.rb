@@ -12,7 +12,7 @@ describe Devise::Models::JiraAuthenticable do
 
   let(:auth_key) { Devise.authentication_keys.first }
 
-  context 'configuration' do
+  describe 'configuration' do
     it 'allows configuration of the JIRA server URL' do
       expect(Devise.jira_site).to eq 'https://remotejira.com'
     end
@@ -26,12 +26,12 @@ describe Devise::Models::JiraAuthenticable do
     end
   end
 
-  context "when finding the jirauser record for authentication" do
-    let(:good_auth_hash) { {username: 'testuser', password: 'password'} }
-    let(:bad_auth_hash) { {username: 'testuser', password: 'wrongpassword'} }
+  context 'when finding the jirauser record for authentication' do
+    let(:good_auth_hash) { { username: 'testuser', password: 'password' } }
+    let(:bad_auth_hash) { { username: 'testuser', password: 'wrongpassword' } }
 
     it 'uses the existing user record when one is found' do
-      user = FactoryGirl.create(:jirauser)
+      user = FactoryBot.create(:jirauser)
       expect(User.find_for_jira_authentication(good_auth_hash)).to eq(user)
     end
 
@@ -65,7 +65,7 @@ describe Devise::Models::JiraAuthenticable do
           .to_timeout
       end
 
-      it "catches the RuntimeError exception if handle_jira_timeout_as_failure is false" do
+      it 'catches the RuntimeError exception if handle_jira_timeout_as_failure is false' do
         expect { example_user.valid_jira_password?('password') }.to raise_error(RuntimeError)
       end
 

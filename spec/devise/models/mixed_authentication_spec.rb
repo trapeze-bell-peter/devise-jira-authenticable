@@ -13,8 +13,8 @@ describe Devise::Models::JiraAuthenticable do
 
   include_context 'mock jira http calls'
 
-  let!(:dbuser) { FactoryGirl.create(:dbuser) }
-  let!(:jirauser) { FactoryGirl.create(:jirauser) }
+  let!(:dbuser) { FactoryBot.create(:dbuser) }
+  let!(:jirauser) { FactoryBot.create(:jirauser) }
   let(:auth_key) { Devise.authentication_keys.first }
 
   it "will allow the dbuser's password to be set" do

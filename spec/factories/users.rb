@@ -1,10 +1,13 @@
-FactoryGirl.define do
+
+
+FactoryBot.define do
   factory :user do
     factory :dbuser do
       username { 'dbuser' }
       email    { 'dbuser@testsite.com' }
       password { 'db-password' }
     end
+
     factory :jirauser do
       username { 'testuser' }
       email    { 'testuser@testsite.com' }
