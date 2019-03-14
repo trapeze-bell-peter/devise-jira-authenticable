@@ -1,5 +1,3 @@
-
-
 require 'devise'
 
 require 'devise/jira_authenticable/version'

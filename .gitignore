@@ -16,3 +16,5 @@
 
 /spec/rails_app/spec/
 /spec/rails_app/test/
+
+vendor/cache/

@@ -10,7 +10,7 @@ describe DeviseJiraAuthenticable::InstallGenerator, type: :generator do
   end
 
   it "requires the JIRA URL to be specified" do
-    expect{ run_generator }.to raise_error(Thor::RequiredArgumentMissingError, /required arguments 'jira_site'/)
+    expect { run_generator }.to raise_error(Thor::RequiredArgumentMissingError, /required arguments 'jira_site'/)
   end
 
   context "with required arguments" do

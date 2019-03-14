@@ -1,5 +1,3 @@
-
-
 FactoryBot.define do
   factory :user do
     factory :dbuser do

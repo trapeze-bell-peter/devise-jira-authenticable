@@ -1,4 +1,4 @@
-ENV["RAILS_ENV"] ||= 'test'
+ENV['RAILS_ENV'] ||= 'test'
 
 require 'rails_app/config/environment'
 require 'rspec/rails'
@@ -15,7 +15,7 @@ Dir["#{File.dirname(__FILE__)}/factories/**/*.rb"].each {|f| require f}
 # Make sure to get the database migrated
 ActiveRecord::Migration.verbose = false
 ActiveRecord::Base.logger = Logger.new(nil)
-ActiveRecord::Migrator.migrate(File.expand_path("../rails_app/db/migrate/", __FILE__))
+ActiveRecord::MigrationContext.new(File.expand_path('rails_app/db/migrate/', __FILE__)).migrate
 
 # RSpec Configuration
 RSpec.configure do |config|
