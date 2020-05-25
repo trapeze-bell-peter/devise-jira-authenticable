@@ -1,4 +1,6 @@
+
 require 'rails_helper'
+require 'shared_contexts/mocked_http_client'
 
 # In certain circumstances we might have users authenticated via JIRA and others authenticated via the database.
 # These specs test that database authentication (including password reset) can work alongside JIRA authentication.

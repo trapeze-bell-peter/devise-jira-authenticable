@@ -1,3 +1,5 @@
+require 'rails_helper'
+
 RSpec.shared_context 'mock jira http calls', :shared_context => :metadata do
   require 'webmock/rspec'
 

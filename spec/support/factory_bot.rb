@@ -4,8 +4,9 @@ require 'factory_bot'
 RSpec.configure do |config|
   config.include FactoryBot::Syntax::Methods
 
-  # Add any directories directly underneath spec/factories to the FactoryBot path.
-  Dir.entries(File.join(Rails.root, '../factories')).select do |f|
-    FactoryBot.definition_file_paths.add(f) if File.directory?(f) && f !~ /.*/
+  FactoryBot.definition_file_paths << File.expand_path('spec/factories')
+
+  config.before(:suite) do
+    FactoryBot.find_definitions
   end
 end

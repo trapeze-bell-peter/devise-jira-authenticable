@@ -1,6 +1,6 @@
 require: rubocop-rspec
 
-Metrics/LineLength:
+Layout/LineLength:
   Max: 120
 
 Rails:
@@ -27,9 +27,8 @@ Metrics/ModuleLength:
   Exclude:
     - "spec/*/**/*_spec.rb"
 
-Metrics/BlockLength:
-  Exclude:
-    - "spec/*/**/*_spec.rb"
+RSpec/DescribedClass:
+  Enabled: false
 
 RSpec/LetSetup:
   Enabled: false
@@ -42,12 +41,6 @@ Metrics/BlockLength:
 
 # I like to use the description 'scenario in feature specs.
 Capybara/FeatureMethods:
-  Exclude:
-    - spec/features/**/*_spec.rb
-
-# Rubocop gets confused between the Capybara find_by_id and the dynamic finders for ActiveRecords in Rails.
-# Disabled in features to stop false warnings.
-Rails/DynamicFindBy:
   Exclude:
     - spec/features/**/*_spec.rb
 

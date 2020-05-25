@@ -1,4 +1,5 @@
 require 'rails_helper'
+require 'shared_contexts/mocked_http_client'
 
 describe Devise::Models::JiraAuthenticable do
   before(:all) do

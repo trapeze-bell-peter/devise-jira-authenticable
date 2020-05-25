@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 # Use this hook to configure devise mailer, warden hooks and so forth.
 # Many of these configuration options can be set straight in your model.
 Devise.setup do |config|
@@ -6,7 +8,11 @@ Devise.setup do |config|
   # confirmation, reset password and unlock tokens in the database.
   # Devise will use the `secret_key_base` as its `secret_key`
   # by default. You can change it below and use your own secret key.
-  # config.secret_key = 'eb8d5239f01eedd9c505076a753193ebd9ad148899a37738d96b846cf78fac2897c69414d7a51c5130d05c2819a32230687a5cf1b60c5fddb71565e36abf60fa'
+  # config.secret_key = '1730f40db2c641c76e4228bb2d2d65783d36cb4cc169e01fe40edc35fc4e704e657598690bc0d954d6fce465ee7fedb72cee77dcac8ba73d7d3d5af1829de3d3'
+
+  # ==> Controller configuration
+  # Configure the parent class to the devise controllers.
+  # config.parent_controller = 'DeviseController'
 
   # ==> Mailer Configuration
   # Configure the e-mail address which will be shown in Devise::Mailer,
@@ -108,7 +114,7 @@ Devise.setup do |config|
   config.stretches = Rails.env.test? ? 1 : 11
 
   # Set up a pepper to generate the hashed password.
-  # config.pepper = 'cb8f8ae98ece8f360e25694c62c0044f5d774f39c6c6a65fd606b3b5831c8b6e4bd11599e71dd12a9c50bc06d3a1aad1df6a6cf1ea2f6f754b3bcfa28ff64cac'
+  # config.pepper = '1f96d088a2e8e20f2bc5e18f3fc38d6723b002768ec76ac9151d9e74db1e040fe5ce7374bf46a01cfc98f2f985525d3218a267f6e013eb458446ca2c7da34f6d'
 
   # Send a notification to the original email when the user's email is changed.
   # config.send_email_changed_notification = false
@@ -120,8 +126,11 @@ Devise.setup do |config|
   # A period that the user is allowed to access the website even without
   # confirming their account. For instance, if set to 2.days, the user will be
   # able to access the website for two days without confirming their account,
-  # access will be blocked just in the third day. Default is 0.days, meaning
-  # the user cannot access the website without confirming their account.
+  # access will be blocked just in the third day.
+  # You can also set it to nil, which will allow the user to access the website
+  # without confirming their account.
+  # Default is 0.days, meaning the user cannot access the website without
+  # confirming their account.
   # config.allow_unconfirmed_access_for = 2.days
 
   # A period that the user is allowed to confirm their account before their
@@ -218,13 +227,7 @@ Devise.setup do |config|
   #
   # Require the `devise-encryptable` gem when using anything other than bcrypt
   # config.encryptor = :sha512
-  # ==> Configuration for jira_authenticable
-  # The jira_authenticable strategy can be used in place of the
-  # database_authenticatable strategy or alongside it.  The default order of the
-  # strategies is the reverse of how they were loaded.  You can control this
-  # order by explicitly telling warden the order in which to apply the strategies.
-  # See the Warden Configuration section for further details.
-  #
+
   # Configure the URL of the JIRA server to use.
   config.jira_site = 'https://remotejira.com'
   # Configure the context path for the JIRA server.  Default is /jira
@@ -238,7 +241,7 @@ Devise.setup do |config|
   # Turn scoped views on. Before rendering "sessions/new", it will first check for
   # "users/sessions/new". It's turned off by default because it's slower if you
   # are using only default views.
-  config.scoped_views = true
+  # config.scoped_views = false
 
   # Configure the default scope given to Warden. By default it's the first
   # devise role declared in your routes (usually :user).
@@ -289,4 +292,17 @@ Devise.setup do |config|
   # When using OmniAuth, Devise cannot automatically set OmniAuth path,
   # so you need to do it manually. For the users scope, it would be:
   # config.omniauth_path_prefix = '/my_engine/users/auth'
+
+  # ==> Turbolinks configuration
+  # If your app is using Turbolinks, Turbolinks::Controller needs to be included to make redirection work correctly:
+  #
+  # ActiveSupport.on_load(:devise_failure_app) do
+  #   include Turbolinks::Controller
+  # end
+
+  # ==> Configuration for :registerable
+
+  # When set to false, does not sign a user in automatically after their password is
+  # changed. Defaults to true, so a user is signed in automatically after changing a password.
+  # config.sign_in_after_change_password = true
 end

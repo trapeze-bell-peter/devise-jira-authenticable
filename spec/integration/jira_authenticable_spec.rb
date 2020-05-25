@@ -1,6 +1,7 @@
 # frozen_string_literal: true
 
 require 'rails_helper'
+require 'shared_contexts/mocked_http_client'
 
 RSpec.feature 'login', type: :feature do
   include Warden::Test::Helpers

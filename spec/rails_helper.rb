@@ -1,21 +1,31 @@
-ENV['RAILS_ENV'] ||= 'test'
+# frozen_string_literal: true
 
 require 'rails_app/config/environment'
-require 'rspec/rails'
 
+require 'rspec/rails'
 require 'capybara/rails'
 require 'selenium-webdriver'
+require 'devise'
+require 'rspec-html-matchers'
+require 'factory_bot_rails'
 require 'ammeter/init'
-require 'factory_bot'
 
-# Load in all of our supporting code
-Dir["#{File.dirname(__FILE__)}/support/**/*.rb"].each {|f| require f}
-Dir["#{File.dirname(__FILE__)}/factories/**/*.rb"].each {|f| require f}
+# Requires supporting ruby files with custom matchers and macros, etc, in
+# spec/support/ and its subdirectories. Files matching `spec/**/*_spec.rb` are
+# run as spec files by default. This means that files in spec/support that end
+# in _spec.rb will both be required and run as specs, causing the specs to be
+# run twice. It is recommended that you do not name files matching this glob to
+# end with _spec.rb. You can configure this pattern with the --pattern
+# option on the command line or in ~/.rspec, .rspec or `.rspec-local`.
+#
+# The following line is provided for convenience purposes. It has the downside
+# of increasing the boot-up time by auto-requiring all files in the support
+# directory. Alternatively, in the individual `*_spec.rb` files, manually
+# require only the support files necessary.
 
-# Make sure to get the database migrated
-ActiveRecord::Migration.verbose = false
-ActiveRecord::Base.logger = Logger.new(nil)
-ActiveRecord::MigrationContext.new(File.expand_path('rails_app/db/migrate/', __FILE__)).migrate
+Dir['spec/support/**/*.rb'].each do |f|
+  require File.expand_path(f)
+end
 
 # RSpec Configuration
 RSpec.configure do |config|
@@ -65,4 +75,7 @@ Capybara.register_driver :chrome do |app|
   Capybara::Selenium::Driver.new(app, :browser => :chrome)
 end
 
+Capybara.server = :puma
+Capybara.server_port = 3000
+Capybara.app_host = "http://0.0.0.0:#{Capybara.server_port}"
 Capybara.javascript_driver = :chrome
