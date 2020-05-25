@@ -1,7 +1,7 @@
 PATH
   remote: /home/peter/RubymineProjects/devise-jira-authenticable
   specs:
-    devise-jira-authenticable (0.0.5)
+    devise-jira-authenticable (0.0.6)
       devise (~> 4.7)
       jira-ruby (~> 2.0.0)
       rails (~> 6.0)
